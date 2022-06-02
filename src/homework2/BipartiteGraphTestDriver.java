@@ -188,10 +188,14 @@ public class BipartiteGraphTestDriver {
      */
     public String getChildByEdgeLabel(String graphName, String parentName,
     								   String edgeLabel) {
-        return this.graphs.get(graphName).getChildVertexByEdgeLabel(parentName, edgeLabel);
+        String toRet= this.graphs.get(graphName).getChildVertexByEdgeLabel(parentName, edgeLabel);
+        if (toRet==null){
+            return "";
+        }
+        else{
+            return toRet;
+        }
     	//TODO: Implement this method
-    	
-    	
     }
 
     
@@ -203,7 +207,13 @@ public class BipartiteGraphTestDriver {
      */
     public String getParentByEdgeLabel(String graphName, String childName,
     									String edgeLabel) {
-        return this.graphs.get(graphName).getParentVertexByEdgeLabel(childName,edgeLabel);
+        String toRet= this.graphs.get(graphName).getParentVertexByEdgeLabel(childName,edgeLabel);
+        if (toRet==null){
+            return "";
+        }
+        else{
+            return toRet;
+        }
     	//TODO: Implement this method
     	
     	

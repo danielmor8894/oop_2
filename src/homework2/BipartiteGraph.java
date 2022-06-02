@@ -71,7 +71,7 @@ public class BipartiteGraph<T> {
             return;
         }
         Node newBlackNode= new Node(nodeLabel);
-        if (!this.blackNodes.containsKey(nodeLabel)){
+        if ((!this.blackNodes.containsKey(nodeLabel))&& (!this.whiteNodes.containsKey(nodeLabel))){
             this.blackNodes.put(nodeLabel, newBlackNode);
         }
         checkRep();
@@ -84,7 +84,7 @@ public class BipartiteGraph<T> {
             return;
         }
         Node newWhiteNode= new Node(nodeLabel);
-        if (!this.whiteNodes.containsKey(nodeLabel)) {
+        if ((!this.whiteNodes.containsKey(nodeLabel))&& (!this.blackNodes.containsKey(nodeLabel))) {
             this.whiteNodes.put(nodeLabel, newWhiteNode);
         }
         checkRep();
