@@ -7,6 +7,8 @@ public class BipartiteGraph<T> {
         T label;
         Map<T,Node> incomingEdges= new HashMap<>();
         Map<T,Node> outgoingEdges= new HashMap<>();
+        List<T> parents= new ArrayList<>();
+        List<T> children= new ArrayList<>();
         public Node(T label){
             this.label= label;
         }
@@ -111,7 +113,9 @@ public class BipartiteGraph<T> {
                 return;
             }
             this.blackNodes.get(parentVertex).outgoingEdges.put(edgeLabel,child );
+            this.blackNodes.get(parentVertex).children.add(childVertex);
             this.whiteNodes.get(childVertex).incomingEdges.put(edgeLabel, parent);
+            this.whiteNodes.get(childVertex).parents.add(parentVertex);
         }
         else {
             //parent is white & child is black
@@ -120,7 +124,9 @@ public class BipartiteGraph<T> {
                 return;
             }
             this.whiteNodes.get(parentVertex).outgoingEdges.put(edgeLabel,child);
+            this.whiteNodes.get(parentVertex).children.add(childVertex);
             this.blackNodes.get(childVertex).incomingEdges.put(edgeLabel,parent);
+            this.blackNodes.get(childVertex).parents.add(parentVertex);
         }
         this.edges.add(newEdge);
         checkRep();
@@ -165,49 +171,31 @@ public class BipartiteGraph<T> {
     }
     public ArrayList<T> getListChildren(T parentVertex){
 
-        ArrayList<T> toRet= new ArrayList<>();
         if (parentVertex==null ||(!this.checkIfNodeExists(parentVertex))){   //node doesn't exist
-            return toRet;
+            return new ArrayList<>() ;
         }
         else if(this.whiteNodes.containsKey(parentVertex)){   //node is white
-            Iterator<Map.Entry<T,Node>> iter= this.whiteNodes.get(parentVertex).outgoingEdges.entrySet().iterator();
-            while (iter.hasNext()){
-                Node<T> e1= (Node)iter.next().getValue();
-                toRet.add(e1.label);
-            }
+            return new ArrayList<>(this.whiteNodes.get(parentVertex).children);
+
         }
         else {     //node is black
-            Iterator<Map.Entry<T,Node>> iter= this.blackNodes.get(parentVertex).outgoingEdges.entrySet().iterator();
-            while (iter.hasNext()){
-                Node<T> e1= (Node)iter.next().getValue();
-                toRet.add(e1.label);
-            }
+            return new ArrayList<>(this.blackNodes.get(parentVertex).children);
+
         }
-        return toRet;
     }
 
     public ArrayList<T> getListParents (T childVertex){
-        ArrayList<T> toRet= new ArrayList<>();
         if (childVertex==null || (!this.checkIfNodeExists(childVertex))){   //node doesn't exist
-            return toRet;
+            return new ArrayList<>() ;
         }
         else if(this.whiteNodes.containsKey(childVertex)){   //node is white
-            Iterator<Map.Entry<T,Node>> iter= this.whiteNodes.get(childVertex).incomingEdges.entrySet().iterator();
-            while (iter.hasNext()){
-                Node<T> e1= (Node)iter.next().getValue();
-                toRet.add(e1.label);
-            }
+            return new ArrayList<>(this.whiteNodes.get(childVertex).parents);
         }
         else {     //node is black
-            Iterator<Map.Entry<T,Node>> iter= this.blackNodes.get(childVertex).incomingEdges.entrySet().iterator();
-            while (iter.hasNext()){
-                Node<T> e1= (Node)iter.next().getValue();
-                toRet.add(e1.label);
-            }
+            return new ArrayList<>(this.blackNodes.get(childVertex).parents);
         }
-        return toRet;
-
     }
+
     public T getChildVertexByEdgeLabel(T parentLabel, T edgeLabel){
         if (parentLabel==null || edgeLabel== null || (!this.checkIfNodeExists(parentLabel))){   //parent node doesn't exist
             return null;
