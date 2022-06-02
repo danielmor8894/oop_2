@@ -60,34 +60,43 @@ public class BipartiteGraph<T> {
         }
 
     }
-    private String name;
     Map<T, Node> blackNodes= new HashMap();
     Map<T,Node> whiteNodes= new HashMap<>();
     Set <Edge> edges= new HashSet<>();
 
-    public BipartiteGraph( String name){
-        this.name= name;
-    }
 
     public void addBlackNode (T nodeLabel){
         checkRep();
+        if (nodeLabel==null){
+            return;
+        }
         Node newBlackNode= new Node(nodeLabel);
-        this.blackNodes.put(nodeLabel, newBlackNode);
+        if (!this.blackNodes.containsKey(nodeLabel)){
+            this.blackNodes.put(nodeLabel, newBlackNode);
+        }
         checkRep();
     }
 
     public void addWhiteNode (T nodeLabel){
 
         checkRep();
+        if (nodeLabel==null){
+            return;
+        }
         Node newWhiteNode= new Node(nodeLabel);
-        this.blackNodes.put(nodeLabel, newWhiteNode);
+        if (!this.whiteNodes.containsKey(nodeLabel)) {
+            this.whiteNodes.put(nodeLabel, newWhiteNode);
+        }
         checkRep();
     }
 
     public void addEdge (T parentVertex, T childVertex, T edgeLabel){
 
         checkRep();
-        if (!isEdgeLegal(parentVertex,childVertex)){
+        if (parentVertex==null || childVertex== null || edgeLabel==null){
+            return;
+        }
+        else if (!isEdgeLegal(parentVertex,childVertex)){
             return;
         }
         Node parent= new Node(parentVertex);
@@ -97,10 +106,19 @@ public class BipartiteGraph<T> {
             return;
         }
         else if (this.blackNodes.containsKey(parentVertex)){                             //parent is black & child is white
+            if (this.blackNodes.get(parentVertex).outgoingEdges.containsKey(edgeLabel)||  //make sure there is no edge with the same label
+                    this.whiteNodes.get(childVertex).incomingEdges.containsKey(edgeLabel)){
+                return;
+            }
             this.blackNodes.get(parentVertex).outgoingEdges.put(edgeLabel,child );
             this.whiteNodes.get(childVertex).incomingEdges.put(edgeLabel, parent);
         }
-        else {                                                                      //parent is white & child is black
+        else {
+            //parent is white & child is black
+            if (this.whiteNodes.get(parentVertex).outgoingEdges.containsKey(edgeLabel)||  //make sure there is no edge with the same label
+                    this.blackNodes.get(childVertex).incomingEdges.containsKey(edgeLabel)){
+                return;
+            }
             this.whiteNodes.get(parentVertex).outgoingEdges.put(edgeLabel,child);
             this.blackNodes.get(childVertex).incomingEdges.put(edgeLabel,parent);
         }
@@ -146,20 +164,23 @@ public class BipartiteGraph<T> {
         return toRet;
     }
     public ArrayList<T> getListChildren(T parentVertex){
+
         ArrayList<T> toRet= new ArrayList<>();
-        if (!this.checkIfNodeExists(parentVertex)){   //node doesn't exist
+        if (parentVertex==null ||(!this.checkIfNodeExists(parentVertex))){   //node doesn't exist
             return toRet;
         }
         else if(this.whiteNodes.containsKey(parentVertex)){   //node is white
             Iterator<Map.Entry<T,Node>> iter= this.whiteNodes.get(parentVertex).outgoingEdges.entrySet().iterator();
             while (iter.hasNext()){
-                toRet.add(iter.next().getKey());
+                Node<T> e1= (Node)iter.next().getValue();
+                toRet.add(e1.label);
             }
         }
         else {     //node is black
             Iterator<Map.Entry<T,Node>> iter= this.blackNodes.get(parentVertex).outgoingEdges.entrySet().iterator();
             while (iter.hasNext()){
-                toRet.add(iter.next().getKey());
+                Node<T> e1= (Node)iter.next().getValue();
+                toRet.add(e1.label);
             }
         }
         return toRet;
@@ -167,26 +188,28 @@ public class BipartiteGraph<T> {
 
     public ArrayList<T> getListParents (T childVertex){
         ArrayList<T> toRet= new ArrayList<>();
-        if (!this.checkIfNodeExists(childVertex)){   //node doesn't exist
+        if (childVertex==null || (!this.checkIfNodeExists(childVertex))){   //node doesn't exist
             return toRet;
         }
         else if(this.whiteNodes.containsKey(childVertex)){   //node is white
             Iterator<Map.Entry<T,Node>> iter= this.whiteNodes.get(childVertex).incomingEdges.entrySet().iterator();
             while (iter.hasNext()){
-                toRet.add(iter.next().getKey());
+                Node<T> e1= (Node)iter.next().getValue();
+                toRet.add(e1.label);
             }
         }
         else {     //node is black
             Iterator<Map.Entry<T,Node>> iter= this.blackNodes.get(childVertex).incomingEdges.entrySet().iterator();
             while (iter.hasNext()){
-                toRet.add(iter.next().getKey());
+                Node<T> e1= (Node)iter.next().getValue();
+                toRet.add(e1.label);
             }
         }
         return toRet;
 
     }
     public T getChildVertexByEdgeLabel(T parentLabel, T edgeLabel){
-        if (!this.checkIfNodeExists(parentLabel)){   //parent node doesn't exist
+        if (parentLabel==null || edgeLabel== null || (!this.checkIfNodeExists(parentLabel))){   //parent node doesn't exist
             return null;
         }
         else if (this.whiteNodes.containsKey(parentLabel))  {   //parent node is white
@@ -211,7 +234,7 @@ public class BipartiteGraph<T> {
     }
 
     public T getParentVertexByEdgeLabel(T childLabel, T edgeLabel){
-        if (!this.checkIfNodeExists(childLabel)){   //parent node doesn't exist
+        if (childLabel==null || edgeLabel== null || (!this.checkIfNodeExists(childLabel))){   //parent node doesn't exist
             return null;
         }
         else if (this.whiteNodes.containsKey(childLabel))  {   //parent node is white
@@ -244,7 +267,7 @@ public class BipartiteGraph<T> {
             assert (!((this.whiteNodes.containsKey(e.source.label))&&(this.whiteNodes.containsKey(e.dest.label)))):
                     "both nodes are white";
         }
-        assert this.name!=null : "graph name is null!";
+
     }
 
 }
