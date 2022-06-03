@@ -3,65 +3,6 @@ import java.util.*;
 
 public class BipartiteGraph<T> {
 
-    class Node<T> {
-        T label;
-        Map<T,Node> incomingEdges= new HashMap<>();
-        Map<T,Node> outgoingEdges= new HashMap<>();
-        List<T> parents= new ArrayList<>();
-        List<T> children= new ArrayList<>();
-        public Node(T label){
-            this.label= label;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || o.getClass() != this.getClass()) {
-                return false;
-
-            }
-            Node<T> o1= (Node<T>)o;
-            return (this.label.equals(o1.label));
-
-        }
-
-        @Override
-        public int hashCode(){
-            return this.label.hashCode();
-        }
-
-    }
-    class Edge<T>{
-        T label;
-        Node source;
-        Node dest;
-        public Edge(T label, Node source, Node dest){
-            this.label= label;
-            this.source= source;
-            this.dest= dest;
-        }
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || o.getClass() != this.getClass()) {
-                return false;
-            }
-
-            Edge<T> e1 = (Edge<T>) o;
-            return (this.source.equals(e1.source) && (this.dest.equals(e1.dest)));
-
-        }
-        @Override
-        public int hashCode(){
-            return this.source.hashCode()+ this.dest.hashCode();
-
-        }
-
-    }
     Map<T, Node> blackNodes= new HashMap();
     Map<T,Node> whiteNodes= new HashMap<>();
     Set <Edge> edges= new HashSet<>();
