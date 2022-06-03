@@ -4,8 +4,8 @@ import java.util.*;
 
 public class IntPipe extends Node<String> implements Simulatable {
 
-    private List<Integer> inputPipe= new ArrayList<Integer>();
-    private List<Integer> outputPipe= new ArrayList<Integer>();
+    private LinkedList<Integer> inputPipe= new LinkedList<>();
+    private LinkedList<Integer> outputPipe= new LinkedList<>();
 
 
     public IntPipe(String label){
@@ -16,13 +16,28 @@ public class IntPipe extends Node<String> implements Simulatable {
     public void simulate(BipartiteGraph graph) {
         Iterator it = this.inputPipe.iterator();
         while (it.hasNext()){
-            this.outputPipe.add((Integer) it.next());
+            this.outputPipe.addFirst((Integer) it.next());
         }
         this.inputPipe.clear();
 
     }
 
     public void injectInput(int value){
-        this.inputPipe.add(value);
+        this.inputPipe.addFirst(value);
+    }
+
+    public LinkedList<Integer> getContent (){
+        LinkedList<Integer> toRet= new LinkedList<>(this.inputPipe);
+        LinkedList<Integer> toAppend= new LinkedList<>(this.outputPipe);
+        toRet.addAll(toAppend);
+        return toRet;
+    }
+    public int getLastNumberInPipe (){
+        int toRet= this.outputPipe.removeLast();
+        return toRet;
+    }
+
+    public boolean isOutputListEmpty(){
+        return this.outputPipe.isEmpty();
     }
 }
