@@ -33,13 +33,12 @@ public class BipartiteGraphTest {
     }
 
     @Test
-    public void blackBoxTest(){
+    public void blackBoxTest1(){
         BipartiteGraphTestDriver driver = new BipartiteGraphTestDriver();
 
         //create a graph
         driver.createGraph("graph");
 
-        //add a pair of nodes
         driver.addBlackNode("graph", "n1");  //valid
         driver.addWhiteNode("graph", "n2");  //valid
         driver.addBlackNode("graph", "n1");  //invalid insertion
@@ -67,6 +66,7 @@ public class BipartiteGraphTest {
         driver.addEdge("graph","a7", "n2", "edge3");  //valid
 
 
+
         assertEquals("wrong black nodes", "a6 a7 n1 n4", driver.listBlackNodes("graph"));
         assertEquals("wrong white nodes", "a5 n2 n3", driver.listWhiteNodes("graph"));
         assertEquals("wrong children", "n2 n3", driver.listChildren ("graph", "n1"));
@@ -75,6 +75,29 @@ public class BipartiteGraphTest {
         assertEquals("wrong children", "", driver.listChildren ("graph", null));
         assertEquals("wrong children", "", driver.listChildren ("graph", "n105"));
         assertEquals("wrong children", "", driver.listChildren ("graph", "a5"));
+
+
+    }
+
+    @Test
+    public void blackBoxTest2(){
+        BipartiteGraphTestDriver driver = new BipartiteGraphTestDriver();
+
+        //create a graph
+        driver.createGraph("graph");
+        driver.addBlackNode("graph", "n1");  //valid
+        driver.addWhiteNode("graph", "n2");  //valid
+        driver.addWhiteNode("graph", "n3");  //valid
+        driver.addBlackNode("graph", "n4");  //valid
+        driver.addWhiteNode("graph", "a5");  //valid
+        driver.addBlackNode("graph", "a6");  //valid
+        driver.addBlackNode("graph", "a7");  //valid
+
+        driver.addEdge("graph","n1", "n2", "edge1");  //valid
+        driver.addEdge("graph","n100", "n2", "edge2");  //one of the verges doesn't exist
+        driver.addEdge("graph","n1", "n3", "edge2");  //valid
+        driver.addEdge("graph","a7", "n2", "edge3");  //valid
+
         assertEquals("wrong parents", "", driver.listParents ("graph", "n1"));
         assertEquals("wrong parents", "a7 n1", driver.listParents ("graph", "n2"));
         assertEquals("wrong parents", "n1", driver.listParents ("graph", "n3"));
@@ -85,8 +108,80 @@ public class BipartiteGraphTest {
         assertEquals("wrong child", "", driver.getParentByEdgeLabel ("graph", "n3", null));
         assertEquals("wrong child", "", driver.getParentByEdgeLabel ("graph", null, "edge1"));
 
+
     }
 
+
+    @Test
+    public void blackBoxTest3(){
+        BipartiteGraphTestDriver driver = new BipartiteGraphTestDriver();
+        driver.createGraph("graph");
+
+        driver.addWhiteNode("graph", "a1");
+        driver.addWhiteNode("graph", "a2");
+        driver.addWhiteNode("graph", "a3");
+        driver.addBlackNode("graph", "b1");
+        driver.addBlackNode("graph", "b2");
+        driver.addBlackNode("graph", "b3");
+
+        driver.addEdge("graph","a1", "b2", "edge1");  //valid
+        driver.addEdge("graph","a2", "b2", "edge1");  //invalid, label already exists in b2
+        driver.addEdge("graph","a2", "b2", "edge2");  //valid
+        driver.addEdge("graph","a2", "b2", "edge3");  //invalid, edge already exists
+        driver.addEdge("graph","b1", "a2", "edge3");  //valid
+        driver.addEdge("graph","b3", "a3", "edge4");  //valid
+        driver.addEdge("graph","a1", "b3", "edge1");  //invalid, label already exists
+        driver.addEdge("graph","a3", "b2", "edge2");  //invalid, label already exists
+
+        assertEquals("wrong black nodes", "b1 b2 b3", driver.listBlackNodes("graph"));
+        assertEquals("wrong white nodes", "a1 a2 a3", driver.listWhiteNodes("graph"));
+        assertEquals("wrong parents", "a1 a2", driver.listParents ("graph", "b2"));
+        assertEquals("wrong parents", "a1 a2", driver.listParents ("graph", "b2"));
+        assertEquals("wrong parents", "", driver.listParents ("graph", null));
+        assertEquals("wrong parents", "", driver.listParents ("graph", "a100"));
+        assertEquals("wrong parents", "", driver.listParents ("graph", "a1"));
+        assertEquals("wrong parents", "b3", driver.listParents ("graph", "a3"));
+        assertEquals("wrong parents", "", driver.listParents ("graph", "b3"));
+        assertEquals("wrong children", "b2", driver.listChildren ("graph", "a2"));
+
+
+
+    }
+
+    @Test
+    public void blackBoxTest4(){
+        BipartiteGraphTestDriver driver = new BipartiteGraphTestDriver();
+        driver.createGraph("graph2");
+
+        driver.addWhiteNode("graph2", "a1");
+        driver.addWhiteNode("graph2", "a2");
+        driver.addWhiteNode("graph2", "a3");
+        driver.addBlackNode("graph2", "b1");
+        driver.addBlackNode("graph2", "b2");
+        driver.addBlackNode("graph2", "b3");
+
+        driver.addEdge("graph2","a1", "b2", "edge1");  //valid
+        driver.addEdge("graph2","a2", "b2", "edge1");  //invalid, label already exists in b2
+        driver.addEdge("graph2","a2", "b2", "edge2");  //valid
+        driver.addEdge("graph2","a2", "b2", "edge3");  //invalid, edge already exists
+        driver.addEdge("graph2","b1", "a2", "edge3");  //valid
+        driver.addEdge("graph2","b3", "a3", "edge4");  //valid
+        driver.addEdge("graph2","a1", "b3", "edge1");  //invalid, label already exists
+        driver.addEdge("graph2","a3", "b2", "edge2");  //invalid, label already exists
+
+        assertEquals("wrong children", "a2", driver.listChildren ("graph2", "b1"));
+        assertEquals("wrong child", "b2", driver.getChildByEdgeLabel ("graph2", "a2", "edge2"));
+        assertEquals("wrong child", "", driver.getChildByEdgeLabel ("graph2", "a2", "edge100"));
+        assertEquals("wrong child", "", driver.getChildByEdgeLabel ("graph2", null, "edge2"));
+        assertEquals("wrong child", "a2", driver.getChildByEdgeLabel ("graph2", "b1", "edge3"));
+        assertEquals("wrong child", "", driver.getChildByEdgeLabel ("graph2", "b1", "edge100"));
+        assertEquals("wrong parent", "a2", driver.getParentByEdgeLabel ("graph2", "b2", "edge2"));
+        assertEquals("wrong parent", "b1", driver.getParentByEdgeLabel ("graph2", "a2", "edge3"));
+        assertEquals("wrong parent", "", driver.getParentByEdgeLabel ("graph2", "a2", "edge100"));
+        assertEquals("wrong parent", "", driver.getParentByEdgeLabel ("graph2", "b2", null));
+        assertEquals("wrong parent", "", driver.getParentByEdgeLabel ("graph2", "b2", "edge100"));
+
+    }
 
 
     //  TODO: Add black-box tests

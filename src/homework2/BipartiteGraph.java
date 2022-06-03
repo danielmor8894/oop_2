@@ -225,7 +225,7 @@ public class BipartiteGraph<T> {
         if (childLabel==null || edgeLabel== null || (!this.checkIfNodeExists(childLabel))){   //parent node doesn't exist
             return null;
         }
-        else if (this.whiteNodes.containsKey(childLabel))  {   //parent node is white
+        else if (this.whiteNodes.containsKey(childLabel))  {   //child node is white
             if (!this.whiteNodes.get(childLabel).incomingEdges.containsKey(edgeLabel)){
                 return null;
             }
@@ -234,7 +234,7 @@ public class BipartiteGraph<T> {
                 return e1.label;
             }
         }
-        else {   //parent node is black
+        else {   //child node is black
             if (!this.blackNodes.get(childLabel).incomingEdges.containsKey(edgeLabel)){
                 return null;
             }
