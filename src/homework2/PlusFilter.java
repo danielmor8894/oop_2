@@ -3,8 +3,9 @@ package homework2;
 import java.util.Iterator;
 import java.util.Map;
 
-public class PlusFilter extends Node implements Simulatable {
-    public PlusFilter(String label){
+public class PlusFilter<T> extends Node implements Simulatable {
+
+    public PlusFilter(T label){
         super(label);
     }
 

@@ -1,8 +1,8 @@
 package homework2;
 
-public class GCDFilter extends Node implements Simulatable {
+public class GCDFilter<T> extends Node implements Simulatable {
 
-    public GCDFilter( String label){
+    public GCDFilter( T label){
         super(label);
     }
 

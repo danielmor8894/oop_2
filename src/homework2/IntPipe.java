@@ -2,19 +2,19 @@ package homework2;
 
 import java.util.*;
 
-public class IntPipe extends Node<String> implements Simulatable {
+public class IntPipe<T> extends Node implements Simulatable {
 
     private LinkedList<Integer> inputPipe= new LinkedList<>();
     private LinkedList<Integer> outputPipe= new LinkedList<>();
 
 
-    public IntPipe(String label){
+    public IntPipe(T label){
         super(label);
     }
 
     @Override
     public void simulate(BipartiteGraph graph) {
-        Iterator it = this.inputPipe.iterator();
+        Iterator it = this.inputPipe.descendingIterator();
         while (it.hasNext()){
             this.outputPipe.addFirst((Integer) it.next());
         }
@@ -40,4 +40,6 @@ public class IntPipe extends Node<String> implements Simulatable {
     public boolean isOutputListEmpty(){
         return this.outputPipe.isEmpty();
     }
+
+
 }
