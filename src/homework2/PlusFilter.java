@@ -10,27 +10,27 @@ public class PlusFilter extends Node implements Simulatable {
 
     @Override
     public void simulate(BipartiteGraph graph) {
+        checkRep();
         int acc= 0;
         Iterator<Map.Entry<String,Node>> iter= this.incomingEdges.entrySet().iterator(); //traverse the node's parents
         while( iter.hasNext()) {
-            if (iter.next().getValue() instanceof IntPipe) {
-                if (!((IntPipe) iter.next().getValue()).isOutputListEmpty()) {
-                    acc += ((IntPipe) iter.next().getValue()).getLastNumberInPipe();
+            IntPipe input= (IntPipe) iter.next().getValue();
+            if (!input.isOutputListEmpty()) {
+                    acc += input.getLastNumberInPipe();
                 }
-            }
+
         }
             if (!this.outgoingEdges.isEmpty()){  //put the result in the node's child
                 Iterator<Map.Entry<String,Node>> iter2= this.outgoingEdges.entrySet().iterator();
-                if (iter2.next().getValue() instanceof IntPipe){
-                    ((IntPipe) iter2.next().getValue()).injectInput(acc);
-                }
+                IntPipe output = (IntPipe) iter2.next().getValue();
+                output.injectInput(acc);
             }
-
+            checkRep();
         }
 
 
     private void checkRep(){
-        assert (this.children.size()<=1): "PlusFilter has more than one output pipe!";
+        assert (this.children.size()<=1 && this.outgoingEdges.size()<=1): "PlusFilter has more than one output pipe!";
     }
 
 }

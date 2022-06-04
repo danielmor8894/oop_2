@@ -42,6 +42,7 @@ public class BipartiteGraph<T> {
         else if (!isEdgeLegal(parentVertex,childVertex)){
             return;
         }
+
         Node parent= new Node(parentVertex);
         Node child= new Node(childVertex);
         Edge newEdge= new Edge(edgeLabel, parent, child);
@@ -53,9 +54,11 @@ public class BipartiteGraph<T> {
                     this.whiteNodes.get(childVertex).incomingEdges.containsKey(edgeLabel)){
                 return;
             }
-            this.blackNodes.get(parentVertex).outgoingEdges.put(edgeLabel,child );
+            Node parent1= this.blackNodes.get(parentVertex);
+            Node child1= this.whiteNodes.get(childVertex);
+            this.blackNodes.get(parentVertex).outgoingEdges.put(edgeLabel,child1 );
             this.blackNodes.get(parentVertex).children.add(childVertex);
-            this.whiteNodes.get(childVertex).incomingEdges.put(edgeLabel, parent);
+            this.whiteNodes.get(childVertex).incomingEdges.put(edgeLabel, parent1);
             this.whiteNodes.get(childVertex).parents.add(parentVertex);
         }
         else {
@@ -64,9 +67,11 @@ public class BipartiteGraph<T> {
                     this.blackNodes.get(childVertex).incomingEdges.containsKey(edgeLabel)){
                 return;
             }
-            this.whiteNodes.get(parentVertex).outgoingEdges.put(edgeLabel,child);
+            Node parent2=  this.whiteNodes.get(parentVertex);
+            Node child2 = this.blackNodes.get(childVertex);
+            this.whiteNodes.get(parentVertex).outgoingEdges.put(edgeLabel,child2);
             this.whiteNodes.get(parentVertex).children.add(childVertex);
-            this.blackNodes.get(childVertex).incomingEdges.put(edgeLabel,parent);
+            this.blackNodes.get(childVertex).incomingEdges.put(edgeLabel,parent2);
             this.blackNodes.get(childVertex).parents.add(parentVertex);
         }
         this.edges.add(newEdge);
