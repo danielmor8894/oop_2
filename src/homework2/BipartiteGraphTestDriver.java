@@ -16,9 +16,7 @@ public class BipartiteGraphTestDriver {
      */
     public BipartiteGraphTestDriver () {
         this.graphs= new HashMap<>();
-    	// TODO: Implement this constructor
-       
-       
+
     }
 
     
@@ -31,9 +29,7 @@ public class BipartiteGraphTestDriver {
     public void createGraph(String graphName) {
         BipartiteGraph<String> newGraph= new BipartiteGraph();
         this.graphs.put(graphName,newGraph);
-        // TODO: Implement this method
-        
-    	
+
     }
 
     
@@ -49,9 +45,7 @@ public class BipartiteGraphTestDriver {
      */
     public void addBlackNode(String graphName, String nodeName) {
         this.graphs.get(graphName).addBlackNode(nodeName);
-    	// TODO: Implement this method
-    	
-    	
+
     }
 
     
@@ -67,9 +61,7 @@ public class BipartiteGraphTestDriver {
      */
     public void addWhiteNode(String graphName, String nodeName) {
         this.graphs.get(graphName).addWhiteNode(nodeName);
-    	//TODO: Implement this method
-    	
-    	
+
     }
 
     
@@ -91,9 +83,7 @@ public class BipartiteGraphTestDriver {
     					String parentName, String childName, 
                         String edgeLabel) {
         this.graphs.get(graphName).addEdge(parentName, childName, edgeLabel);
-    	//TODO: Implement this method
-    	
-    	
+
     }
 
     
@@ -112,11 +102,6 @@ public class BipartiteGraphTestDriver {
                 });
         return String.join(" ", blackNodes);
 
-
-
-                //TODO: Implement this method
-
-
     }
 
     
@@ -134,9 +119,7 @@ public class BipartiteGraphTestDriver {
             }
         });
         return String.join(" ", whiteNodes);
-    	//TODO: Implement this method
-    	
-    	
+
     }
 
     
@@ -154,9 +137,7 @@ public class BipartiteGraphTestDriver {
             }
         });
         return String.join(" ", childrenNodes);
-    	//TODO: Implement this method
-    	
-    	
+
     }
 
     
@@ -174,9 +155,7 @@ public class BipartiteGraphTestDriver {
             }
         });
         return String.join(" ", parentsNodes);
-    	//TODO: Implement this method
-    	
-    	
+
     }
 
     
@@ -195,7 +174,7 @@ public class BipartiteGraphTestDriver {
         else{
             return toRet;
         }
-    	//TODO: Implement this method
+
     }
 
     
@@ -214,8 +193,6 @@ public class BipartiteGraphTestDriver {
         else{
             return toRet;
         }
-    	//TODO: Implement this method
-    	
-    	
+
     }
 }

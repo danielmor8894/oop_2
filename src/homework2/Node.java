@@ -14,8 +14,8 @@ import java.util.Map;
 public class Node <T>{
 
     T label;
-    Map<T, Node> incomingEdges= new HashMap<>();
-    Map<T, Node> outgoingEdges= new HashMap<>();
+    Map<T, Node<T>> incomingEdges= new HashMap<>();
+    Map<T, Node<T>> outgoingEdges= new HashMap<>();
     List<T> parents= new ArrayList<>();
     List<T> children= new ArrayList<>();
 

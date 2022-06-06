@@ -1,5 +1,6 @@
 package homework2;
 
+
 /**
  * A GCDFilter is an abstraction of a GCD Filter object, that extends Node,
  * and implements the Simulatable interface.
@@ -7,7 +8,7 @@ package homework2;
  *  { label, incomingEdges, outgoingEdges, parents, children}.
  */
 
-public class GCDFilter<T> extends Node implements Simulatable {
+public class GCDFilter<T> extends Node<T> implements Simulatable<T> {
 
     /**
      Abstraction Function:
@@ -38,14 +39,14 @@ public class GCDFilter<T> extends Node implements Simulatable {
      * @effects activate one round of gcd filter simulation.
      */
     @Override
-    public void simulate(BipartiteGraph graph) {
+    public void simulate(BipartiteGraph<T> graph) {
         checkRep();
         int a=0, b= 0, gcd= 0;
-        IntPipe aInputPipe= (IntPipe) this.incomingEdges.get("a");
-        IntPipe bInputPipe= (IntPipe) this.incomingEdges.get("b");
-        IntPipe gcdOutputPipe= ((IntPipe) this.outgoingEdges.get("gcd"));
-        IntPipe aOutputPipe= ((IntPipe) this.outgoingEdges.get("a"));
-        IntPipe bOutputPipe= ((IntPipe) this.outgoingEdges.get("b"));
+        IntPipe<T> aInputPipe= (IntPipe<T>) this.incomingEdges.get("a");
+        IntPipe<T> bInputPipe= (IntPipe<T>) this.incomingEdges.get("b");
+        IntPipe<T> gcdOutputPipe= ((IntPipe<T>) this.outgoingEdges.get("gcd"));
+        IntPipe<T> aOutputPipe= ((IntPipe<T>) this.outgoingEdges.get("a"));
+        IntPipe<T> bOutputPipe= ((IntPipe<T>) this.outgoingEdges.get("b"));
 
         if (aInputPipe.isOutputListEmpty() || (bInputPipe.isOutputListEmpty())){
             checkRep();
@@ -57,17 +58,17 @@ public class GCDFilter<T> extends Node implements Simulatable {
         }
         //Euclid Algorithm
         if (b==0){
-            ((IntPipe) this.outgoingEdges.get("gcd")).injectInput(a);
+            ((IntPipe<T>) this.outgoingEdges.get("gcd")).injectInput(a);
         }
         else if(a<b){
 
-            ((IntPipe) this.outgoingEdges.get("a")).injectInput(b);
-            ((IntPipe) this.outgoingEdges.get("b")).injectInput(a);
+            ((IntPipe<T>) this.outgoingEdges.get("a")).injectInput(b);
+            ((IntPipe<T>) this.outgoingEdges.get("b")).injectInput(a);
 
         }
         else{
-            ((IntPipe) this.outgoingEdges.get("a")).injectInput(b);
-            ((IntPipe) this.outgoingEdges.get("b")).injectInput(a%b);
+            ((IntPipe<T>) this.outgoingEdges.get("a")).injectInput(b);
+            ((IntPipe<T>) this.outgoingEdges.get("b")).injectInput(a%b);
 
         }
         checkRep();

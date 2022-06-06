@@ -10,7 +10,7 @@ import java.util.Map;
  *  { label, incomingEdges, outgoingEdges, parents, children}.
  */
 
-public class PlusFilter<T> extends Node implements Simulatable {
+public class PlusFilter<T> extends Node<T> implements Simulatable<T> {
 
     /**
      Abstraction Function:
@@ -41,20 +41,20 @@ public class PlusFilter<T> extends Node implements Simulatable {
      * @effects activate one round of plus filter simulation.
      */
     @Override
-    public void simulate(BipartiteGraph graph) {
+    public void simulate(BipartiteGraph<T> graph) {
         checkRep();
         int acc= 0;
-        Iterator<Map.Entry<String,Node>> iter= this.incomingEdges.entrySet().iterator(); //traverse the node's parents
+        Iterator<Map.Entry<T,Node<T>>> iter= this.incomingEdges.entrySet().iterator(); //traverse the node's parents
         while( iter.hasNext()) {
-            IntPipe input= (IntPipe) iter.next().getValue();
+            IntPipe<T> input= (IntPipe<T>) iter.next().getValue();
             if (!input.isOutputListEmpty()) {
                     acc += input.getLastNumberInPipe();
                 }
 
         }
             if (!this.outgoingEdges.isEmpty()){  //put the result in the node's child
-                Iterator<Map.Entry<String,Node>> iter2= this.outgoingEdges.entrySet().iterator();
-                IntPipe output = (IntPipe) iter2.next().getValue();
+                Iterator<Map.Entry<T,Node<T>>> iter2= this.outgoingEdges.entrySet().iterator();
+                IntPipe<T> output = (IntPipe<T>) iter2.next().getValue();
                 output.injectInput(acc);
             }
             checkRep();

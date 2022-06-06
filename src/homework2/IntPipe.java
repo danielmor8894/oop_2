@@ -9,7 +9,7 @@ import java.util.*;
  *  { label, incomingEdges, outgoingEdges, parents, children,inputPipe, outputPipe  }.
  */
 
-public class IntPipe<T> extends Node implements Simulatable {
+public class IntPipe<T> extends Node<T> implements Simulatable<T> {
 
     private LinkedList<Integer> inputPipe= new LinkedList<>();
     private LinkedList<Integer> outputPipe= new LinkedList<>();
@@ -49,12 +49,14 @@ public class IntPipe<T> extends Node implements Simulatable {
      * @effects activate one round of int pipe simulation.
      */
     @Override
-    public void simulate(BipartiteGraph graph) {
+    public void simulate(BipartiteGraph<T> graph) {
+        checkRep();
         Iterator it = this.inputPipe.descendingIterator();
         while (it.hasNext()){
             this.outputPipe.addFirst((Integer) it.next());
         }
         this.inputPipe.clear();
+        checkRep();
 
     }
 
@@ -65,6 +67,7 @@ public class IntPipe<T> extends Node implements Simulatable {
      */
 
     public void injectInput(int value){
+        checkRep();
         this.inputPipe.addFirst(value);
     }
 
@@ -75,9 +78,11 @@ public class IntPipe<T> extends Node implements Simulatable {
      * and haven't been pushed out yet.
      */
     public LinkedList<Integer> getContent (){
+        checkRep();
         LinkedList<Integer> toRet= new LinkedList<>(this.inputPipe);
         LinkedList<Integer> toAppend= new LinkedList<>(this.outputPipe);
         toRet.addAll(toAppend);
+        checkRep();
         return toRet;
     }
 
@@ -88,8 +93,9 @@ public class IntPipe<T> extends Node implements Simulatable {
      *  and removes it from the pipe.
      */
     public int getLastNumberInPipe (){
-        int toRet= this.outputPipe.removeLast();
-        return toRet;
+        checkRep();
+        return this.outputPipe.removeLast();
+
     }
 
     /**

@@ -11,9 +11,9 @@ import java.util.*;
 
 public class BipartiteGraph<T> {
 
-    Map<T, Node> blackNodes= new HashMap();
-    Map<T,Node> whiteNodes= new HashMap<>();
-    Set <Edge> edges= new HashSet<>();
+    Map<T, Node<T>> blackNodes= new HashMap<T, Node<T>>();
+    Map<T,Node<T>> whiteNodes= new HashMap<T,Node<T>>();
+    Set <Edge<T>> edges= new HashSet<Edge<T>>();
 
     /**
      Abstraction Function:
@@ -39,7 +39,7 @@ public class BipartiteGraph<T> {
         if (nodeLabel==null){
             return;
         }
-        Node newBlackNode= new Node(nodeLabel);
+        Node<T> newBlackNode= new Node<>(nodeLabel);
         if ((!this.blackNodes.containsKey(nodeLabel))&& (!this.whiteNodes.containsKey(nodeLabel))){
             this.blackNodes.put(nodeLabel, newBlackNode);
         }
@@ -58,7 +58,7 @@ public class BipartiteGraph<T> {
         if (nodeLabel==null){
             return;
         }
-        Node newWhiteNode= new Node(nodeLabel);
+        Node<T> newWhiteNode= new Node<>(nodeLabel);
         if ((!this.whiteNodes.containsKey(nodeLabel))&& (!this.blackNodes.containsKey(nodeLabel))) {
             this.whiteNodes.put(nodeLabel, newWhiteNode);
         }
@@ -81,9 +81,9 @@ public class BipartiteGraph<T> {
             return;
         }
 
-        Node parent= new Node(parentVertex);
-        Node child= new Node(childVertex);
-        Edge newEdge= new Edge(edgeLabel, parent, child);
+        Node<T> parent= new Node<>(parentVertex);
+        Node<T> child= new Node<>(childVertex);
+        Edge<T> newEdge= new Edge<>(edgeLabel, parent, child);
         if (this.edges.contains(newEdge)){
             return;
         }
@@ -92,8 +92,8 @@ public class BipartiteGraph<T> {
                     this.whiteNodes.get(childVertex).incomingEdges.containsKey(edgeLabel)){
                 return;
             }
-            Node parent1= this.blackNodes.get(parentVertex);
-            Node child1= this.whiteNodes.get(childVertex);
+            Node<T> parent1= this.blackNodes.get(parentVertex);
+            Node<T> child1= this.whiteNodes.get(childVertex);
             this.blackNodes.get(parentVertex).outgoingEdges.put(edgeLabel,child1 );
             this.blackNodes.get(parentVertex).children.add(childVertex);
             this.whiteNodes.get(childVertex).incomingEdges.put(edgeLabel, parent1);
@@ -105,8 +105,8 @@ public class BipartiteGraph<T> {
                     this.blackNodes.get(childVertex).incomingEdges.containsKey(edgeLabel)){
                 return;
             }
-            Node parent2=  this.whiteNodes.get(parentVertex);
-            Node child2 = this.blackNodes.get(childVertex);
+            Node<T> parent2=  this.whiteNodes.get(parentVertex);
+            Node<T> child2 = this.blackNodes.get(childVertex);
             this.whiteNodes.get(parentVertex).outgoingEdges.put(edgeLabel,child2);
             this.whiteNodes.get(parentVertex).children.add(childVertex);
             this.blackNodes.get(childVertex).incomingEdges.put(edgeLabel,parent2);
@@ -159,7 +159,7 @@ public class BipartiteGraph<T> {
     public ArrayList<T> getListBlackNodes(){
         checkRep();
         ArrayList<T> toRet= new ArrayList<>();
-        Iterator<Map.Entry<T,Node>> iter= this.blackNodes.entrySet().iterator();
+        Iterator<Map.Entry<T,Node<T>>> iter= this.blackNodes.entrySet().iterator();
         while (iter.hasNext()){
              toRet.add(iter.next().getKey());
         }
@@ -176,7 +176,7 @@ public class BipartiteGraph<T> {
     public ArrayList<T> getListWhiteNodes(){
         checkRep();
         ArrayList<T> toRet= new ArrayList<>();
-        Iterator<Map.Entry<T,Node>> iter= this.whiteNodes.entrySet().iterator();
+        Iterator<Map.Entry<T,Node<T>>> iter= this.whiteNodes.entrySet().iterator();
         while (iter.hasNext()){
             toRet.add(iter.next().getKey());
         }
@@ -314,7 +314,7 @@ public class BipartiteGraph<T> {
      */
 
     private void checkRep(){
-        Iterator<Edge> iter= this.edges.iterator();
+        Iterator<Edge<T>> iter= this.edges.iterator();
         while (iter.hasNext()){
             Edge e= iter.next();
             assert (!((this.blackNodes.containsKey(e.source.label))&&(this.blackNodes.containsKey(e.dest.label)))):

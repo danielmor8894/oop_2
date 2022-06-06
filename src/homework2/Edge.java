@@ -7,9 +7,9 @@ package homework2;
 
 public class Edge<T> {
     T label;
-    Node source;
-    Node dest;
-    public Edge(T label, Node source, Node dest){
+    Node<T> source;
+    Node<T> dest;
+    public Edge(T label, Node<T> source, Node<T> dest){
         this.label= label;
         this.source= source;
         this.dest= dest;
@@ -44,6 +44,8 @@ public class Edge<T> {
         return (this.source.equals(e1.source) && (this.dest.equals(e1.dest)));
 
     }
+
+
     /**
      * @requires none
      * @modifies none
