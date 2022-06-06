@@ -310,6 +310,93 @@ public class BipartiteGraph<T> {
     }
 
     /**
+     * @requires none
+     * @modifies this
+     * @effects removes the node which is identified with 'label' from the Bipartite Graph.
+     * does nothing if there is no such a node.
+     */
+
+    public void removeNode(T label){
+        checkRep();
+        if (!this.blackNodes.containsKey(label) && !this.whiteNodes.containsKey(label)){
+            return;
+        }
+        else if (this.blackNodes.containsKey(label)){
+            this.eraseFromList(label, this.blackNodes);
+
+            }
+        else {
+            this.eraseFromList(label, this.whiteNodes);
+
+        }
+        checkRep();
+    }
+
+    /**
+     * @requires none
+     * @modifies this
+     * @effects removes the node which is identified with 'label' from 'nodesList'.
+     * does nothing if there is no such a node.
+     */
+
+
+    private void eraseFromList(T label, Map<T, Node<T>> nodesList) {
+        Node<T> toRemove= nodesList.get(label);
+        Iterator<Map.Entry<T,Node<T>>> iter= toRemove.outgoingEdges.entrySet().iterator();
+        while (iter.hasNext()){  //removes all outgoing edges
+            Map.Entry<T, Node<T>> it= iter.next();
+            T edgeLabel= it.getKey();
+            it.getValue().incomingEdges.remove(edgeLabel);
+            it.getValue().parents.remove(toRemove.label);
+            this.edges.remove(new Edge<>(edgeLabel,toRemove, it.getValue() ));
+        }
+
+        Iterator<Map.Entry<T,Node<T>>> iter2= toRemove.incomingEdges.entrySet().iterator();
+        while (iter2.hasNext()){  //removes all incoming edges
+            Map.Entry<T, Node<T>> it= iter2.next();
+            T edgeLabel= it.getKey();
+            it.getValue().outgoingEdges.remove(edgeLabel);
+            it.getValue().children.remove(toRemove.label);
+            this.edges.remove(new Edge<>(edgeLabel, it.getValue(), toRemove));
+        }
+        nodesList.remove(label);
+
+    }
+
+    /**
+     * @requires none
+     * @modifies this
+     * @effects removes the edge which is identified with 'label' and goes from 'source' to 'dest'.
+     * does nothing if there is no such an edge.
+     */
+
+    public void removeEdge(T label, T source, T dest){
+        checkRep();
+        Node <T> sourceNode= new Node<>(source);
+        Node <T> destNode= new Node<>(dest);
+        Edge<T> toRemove= new Edge<>(label,sourceNode,destNode);
+        if (!this.edges.contains(toRemove)){
+            return;
+        }
+        else{
+            if (this.blackNodes.containsKey(source)){  //source is black & dest is white
+                this.blackNodes.get(source).outgoingEdges.remove(label);
+                this.blackNodes.get(source).children.remove(dest);
+                this.whiteNodes.get(dest).incomingEdges.remove(label);
+                this.whiteNodes.get(dest).parents.remove(source);
+            }
+            else{  //source is white & dest is black
+                this.whiteNodes.get(source).outgoingEdges.remove(label);
+                this.whiteNodes.get(source).children.remove(dest);
+                this.blackNodes.get(dest).incomingEdges.remove(label);
+                this.blackNodes.get(dest).parents.remove(source);
+            }
+            this.edges.remove(toRemove);
+        }
+        checkRep();
+    }
+
+    /**
      * @throws AssertionError if representation invariant is violated
      */
 

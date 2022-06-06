@@ -195,4 +195,29 @@ public class BipartiteGraphTestDriver {
         }
 
     }
+
+
+    /**
+     * @requires createGraph(graphName)
+     * @modifies this
+     * @effects removes the node which is identified with 'label' from the BipartiteGraph graphName  .
+     * does nothing if there is no such a node.
+     */
+
+    public void removeNode(String graphName, String  label){
+        this.graphs.get(graphName).removeNode(label);
+    }
+
+
+    /**
+     * @requires createGraph(graphName)
+     * @modifies this
+     * @effects removes the edge which is identified with 'label' and goes from 'source' to 'dest'
+     * from .the BipartiteGraph graphName.
+     * does nothing if there is no such an edge.
+     */
+
+    public void removeEdge(String graphName, String edgeLabel, String source, String dest){
+        this.graphs.get(graphName).removeEdge(edgeLabel,source,dest);
+    }
 }

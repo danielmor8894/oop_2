@@ -183,4 +183,83 @@ public class BipartiteGraphTest {
 
     }
 
+    @Test
+    public void blackBoxTest5(){
+        BipartiteGraphTestDriver driver = new BipartiteGraphTestDriver();
+        driver.createGraph("graph3");
+        driver.addWhiteNode("graph3", "w1");
+        driver.addWhiteNode("graph3", "w2");
+        driver.addWhiteNode("graph3", "w3");
+        driver.addBlackNode("graph3", "b1");
+        driver.addBlackNode("graph3", "b2");
+        driver.addBlackNode("graph3", "b3");
+        driver.addEdge("graph3","b1", "w1", "edge1");  //valid
+        driver.addEdge("graph3","b1", "w2", "edge2");  //valid
+        driver.addEdge("graph3","b1", "w3", "edge3");  //valid
+        driver.addEdge("graph3","b2", "w3", "edge4");  //valid
+        driver.addEdge("graph3","b3", "w3", "edge4");  //invalid
+        driver.addEdge("graph3","b3", "w3", "edge5");  //valid
+
+        assertEquals("wrong black nodes", "b1 b2 b3", driver.listBlackNodes("graph3"));
+        assertEquals("wrong white nodes", "w1 w2 w3", driver.listWhiteNodes("graph3"));
+        assertEquals("wrong children", "w1 w2 w3", driver.listChildren ("graph3", "b1"));
+        assertEquals("wrong parents", "b1 b2 b3", driver.listParents ("graph3", "w3"));
+        assertEquals("wrong child", "b1", driver.getParentByEdgeLabel ("graph3", "w2", "edge2"));
+        assertEquals("wrong parent", "w1", driver.getChildByEdgeLabel ("graph3", "b1", "edge1"));
+
+        driver.removeNode("graph3", "b1");
+        assertEquals("wrong black nodes", "b2 b3", driver.listBlackNodes("graph3"));
+        assertEquals("wrong black nodes", "w1 w2 w3", driver.listWhiteNodes("graph3"));
+        assertEquals("wrong parents", "b2 b3", driver.listParents ("graph3", "w3"));
+        assertEquals("wrong parent", "b2", driver.getParentByEdgeLabel ("graph3", "w3", "edge4"));
+        driver.removeEdge("graph3", "edge4", "b2", "w3");
+        assertEquals("wrong children", "", driver.listChildren ("graph3", "b2"));
+        assertEquals("wrong children", "b3", driver.listParents ("graph3", "w3"));
+        assertEquals("wrong parent", "", driver.getParentByEdgeLabel ("graph3", "w3", "edge4"));
+
+    }
+
+    @Test
+    public void blackBoxTest6(){
+        BipartiteGraphTestDriver driver = new BipartiteGraphTestDriver();
+        driver.createGraph("graph3");
+        driver.addWhiteNode("graph3", "w1");
+        driver.addWhiteNode("graph3", "w2");
+        driver.addWhiteNode("graph3", "w3");
+        driver.addBlackNode("graph3", "b1");
+        driver.addBlackNode("graph3", "b2");
+        driver.addBlackNode("graph3", "b3");
+        driver.addEdge("graph3","w1", "b1", "edge1");  //valid
+        driver.addEdge("graph3","b1", "w1", "edge10");  //valid
+        driver.addEdge("graph3","b1", "w2", "edge2");  //valid
+        driver.addEdge("graph3","b1", "w3", "edge3");  //valid
+        driver.addEdge("graph3","b2", "w3", "edge4");  //valid
+        driver.addEdge("graph3","b3", "w3", "edge4");  //invalid
+        driver.addEdge("graph3","b3", "w3", "edge5");  //valid
+
+        assertEquals("wrong black nodes", "b1 b2 b3", driver.listBlackNodes("graph3"));
+        assertEquals("wrong black nodes", "w1 w2 w3", driver.listWhiteNodes("graph3"));
+        assertEquals("wrong children", "w1 w2 w3", driver.listChildren ("graph3", "b1"));
+        assertEquals("wrong parents", "b1 b2 b3", driver.listParents ("graph3", "w3"));
+        assertEquals("wrong child", "b1", driver.getParentByEdgeLabel ("graph3", "w2", "edge2"));
+        assertEquals("wrong parent", "w1", driver.getChildByEdgeLabel ("graph3", "b1", "edge10"));
+
+        driver.removeNode("graph3", "w3");
+        assertEquals("wrong black nodes", "b1 b2 b3", driver.listBlackNodes("graph3"));
+        assertEquals("wrong black nodes", "w1 w2", driver.listWhiteNodes("graph3"));
+        assertEquals("wrong children", "w1 w2", driver.listChildren ("graph3", "b1"));
+        assertEquals("wrong parent", "w1", driver.getParentByEdgeLabel ("graph3", "b1", "edge1"));
+        assertEquals("wrong children", "b1", driver.listChildren ("graph3", "w1"));
+        assertEquals("wrong parents", "w1", driver.listParents ("graph3", "b1"));
+        driver.removeEdge("graph3", "edge1", "w1", "b1");
+        assertEquals("wrong children", "", driver.listChildren ("graph3", "w1"));
+        assertEquals("wrong parents", "", driver.listParents ("graph3", "b1"));
+        assertEquals("wrong parent", "", driver.getParentByEdgeLabel ("graph3", "b1", "edge1"));
+
+
+
+
+    }
+
+
 }
