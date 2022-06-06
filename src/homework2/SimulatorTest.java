@@ -199,6 +199,35 @@ public class SimulatorTest {
     }
 
     @Test
+    public void blackBoxPlusFilter3(){
+        SimulatorTestDriver driver= new SimulatorTestDriver();
+        driver.createSimulator("simulator1");
+        driver.addPipe("simulator1", "input1");
+        driver.addPipe("simulator1", "output");
+        driver.addPlusFilter("simulator1", "plusFilter1");
+        driver.addEdge("simulator1", "input1","plusFilter1", "a1" );
+        driver.addEdge("simulator1", "plusFilter1","output", "a4" );
+        assertEquals("wrong input list", "",
+                driver.listContents("simulator1","input1" ));
+        assertEquals("wrong output list", "",
+                driver.listContents("simulator1","output" ));
+
+        driver.simulate("simulator1");
+        assertEquals("wrong input list", "",
+                driver.listContents("simulator1","input1" ));
+        assertEquals("wrong output list", "0",
+                driver.listContents("simulator1","output" ));
+
+        driver.simulate("simulator1");
+        assertEquals("wrong input list", "",
+                driver.listContents("simulator1","input1" ));
+        assertEquals("wrong output list", "0 0",
+                driver.listContents("simulator1","output" ));
+
+
+    }
+
+    @Test
     public void blackBoxGCDFilter2(){
 
         SimulatorTestDriver driver= new SimulatorTestDriver();
@@ -295,6 +324,21 @@ public class SimulatorTest {
                 driver.listContents("simulator2","BPipe" ));
         assertEquals("wrong output list", "100",
                 driver.listContents("simulator2","gcdPipe" ));
+
+    }
+
+    @Test (expected = AssertionError.class)
+    public void blackBoxGCDFilter4(){
+
+        SimulatorTestDriver driver= new SimulatorTestDriver();
+        driver.createSimulator("simulator2");
+        driver.addPipe("simulator2", "APipe");
+        driver.addPipe("simulator2", "gcdPipe");
+        driver.addGCDFilter("simulator2", "gcdFilter");
+        driver.addEdge("simulator2", "APipe", "gcdFilter", "a");
+        driver.addEdge("simulator2", "gcdFilter", "APipe", "a");
+        driver.addEdge("simulator2", "gcdFilter", "gcdPipe", "gcd");
+        driver.simulate("simulator2");
 
     }
 
